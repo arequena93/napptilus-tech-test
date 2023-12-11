@@ -27,9 +27,9 @@ public class FindPriceController {
         produces = "application/json"
     )
     public ResponseEntity<PriceDto> fetchPrices(
-        @RequestParam(name = "fechaAplicacion", required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime fechaAplicacion,
-        @RequestParam(name = "productId", required = false) final Integer productId,
-        @RequestParam(name = "brandId", required = false) final Integer brandId
+        @RequestParam(name = "fechaAplicacion") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) final LocalDateTime fechaAplicacion,
+        @RequestParam(name = "productId") final Integer productId,
+        @RequestParam(name = "brandId") final Integer brandId
     ){
         final PriceDto price = findPriceService.execute(
                 new FindPriceRequest(fechaAplicacion, productId, brandId),
