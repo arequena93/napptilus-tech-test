@@ -1,6 +1,7 @@
 package com.napptilus.techinterview.infrastructure.controller;
 
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -38,6 +39,15 @@ class FindPriceControllerTest {
         String endDate,
         BigDecimal price
     ){}
+
+    @Test
+    void givenSomeFiltersThatDontMatchItShouldReturnNull() throws Exception {
+        this.mockMvc
+                .perform(get(PRICES_ENDPOINT.formatted("2020-06-14T10:00:00", 1, 35475))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").doesNotExist());
+    }
 
     @ParameterizedTest
     @MethodSource("getPossibleFiltersWithValidResponse")
