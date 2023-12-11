@@ -30,7 +30,7 @@ class FindPriceControllerTest {
     private MockMvc mockMvc;
 
     private record InputFiltersAndValidResult(
-        String fechaAplicacion,
+        String dateToCheck,
         Integer productId,
         Integer brandId,
         Integer priceList,
@@ -43,7 +43,7 @@ class FindPriceControllerTest {
     @MethodSource("getPossibleFiltersWithValidResponse")
     void givenSomeFiltersItShouldReturnTheValidPrice(final InputFiltersAndValidResult inputFiltersAndValidResult) throws Exception {
         this.mockMvc
-            .perform(get(PRICES_ENDPOINT.formatted(inputFiltersAndValidResult.fechaAplicacion(), inputFiltersAndValidResult.brandId(), inputFiltersAndValidResult.productId()))
+            .perform(get(PRICES_ENDPOINT.formatted(inputFiltersAndValidResult.dateToCheck(), inputFiltersAndValidResult.brandId(), inputFiltersAndValidResult.productId()))
                     .contentType(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content()

@@ -2,12 +2,10 @@ package com.napptilus.techinterview.application;
 
 import com.napptilus.techinterview.domain.entity.Price;
 import com.napptilus.techinterview.domain.repository.PriceRepository;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-
-import static com.napptilus.techinterview.domain.PriceSpecification.*;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 public class FindPriceService {
@@ -20,12 +18,13 @@ public class FindPriceService {
 
     public PriceDto execute(final FindPriceRequest sRequest, final PricePresenter presenter)
     {
-        final Specification<Price> filters = Specification.where(Objects.isNull(sRequest.brandId()) ? null : brandIdEquals(sRequest.brandId()))
-                                                          .and(Objects.isNull(sRequest.productId()) ? null : productIdEquals(sRequest.productId()))
-                                                          .and(Objects.isNull(sRequest.fechaAplicacion()) ? null : startDateLessThan(sRequest.fechaAplicacion()))
-                                                          .and(Objects.isNull(sRequest.fechaAplicacion()) ? null : endDateGreaterThan(sRequest.fechaAplicacion()));
+        final List<Price> prices = this.priceRepository.findPricesByBrandIdAndProductIdAndStartDateBeforeAndEndDateAfter(
+                sRequest.brandId(),
+                sRequest.productId(),
+                sRequest.dateToCheck(),
+                sRequest.dateToCheck()
+        );
 
-        final List<Price> prices = this.priceRepository.findAll(filters);
         final Price applicablePrice = prices.isEmpty() ? null : this.findPriceWithHighestPriority(prices);
 
         return presenter.write(applicablePrice);
